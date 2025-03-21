@@ -12,21 +12,20 @@ export const useRefreshToken = () => {
     try {
       const response = await refreshToken();
 
-      const token = response.headers["Authorization"] as string;
-      if (token) setAuth(token);
+      const access_token = response.headers["authorization"] as string;
+      if (access_token) setAuth(access_token);
 
-      const profile = response.data?.data;
-      if (profile) setProfile(profile);
+      const user = response.data?.data;
+      if (user) setProfile(user);
 
-      return token;
-    } catch (error) {
-      if (isAxiosError(error)) {
-        const message =
-          error.response?.data.message || "Network error, please try again.";
+      return access_token;
+    } catch (e) {
+      if (isAxiosError(e)) {
+        const message = e.response?.data.response?.message || "Network error";
 
         toast.error(message, { id: "error" });
       } else {
-        toast.error("Network error, please try again.", {
+        toast.error("Network error", {
           id: "error",
         });
       }

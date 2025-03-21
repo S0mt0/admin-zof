@@ -12,7 +12,7 @@ export const RequireAuth = ({ children }: RequireAuthProps) => {
   const location = useLocation();
 
   if (!accessToken)
-    return <Navigate to="/unauthorized" state={{ from: location }} replace />;
+    return <Navigate to="/" state={{ from: location }} replace />;
 
   return children ? children : <Outlet />;
 };

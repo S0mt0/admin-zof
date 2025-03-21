@@ -2,6 +2,7 @@ import { Outlet } from "react-router-dom";
 import { useLayoutEffect, useState } from "react";
 
 import { useAuthStore, useRefreshToken } from "@/lib/hooks";
+import { LoadingLogo } from "../ui/loading-logo";
 
 export const PersistLogin = () => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -28,8 +29,9 @@ export const PersistLogin = () => {
       {!trusted_device ? (
         <Outlet />
       ) : isLoading ? (
-        <div className="h-screen w-full flex flex-col justify-center items-center bg-neutral-100 font-body">
-          <span className="text-xl text-tertiary">Please wait....</span>
+        <div className="h-screen text-sm w-full flex flex-col justify-center items-center gap-4">
+          <LoadingLogo />
+          <span>Please wait...</span>
         </div>
       ) : (
         <Outlet />

@@ -1,19 +1,14 @@
 import { Route, Routes } from "react-router-dom";
 
 import { PersistLogin, RequireAuth } from "./components/auth";
+import { RegistrationPage } from "./pages/register";
+import { LoginPage } from "./pages/login";
 
 function App() {
   return (
     <Routes>
-      <Route
-        path="/"
-        element={
-          <div className="bg-amber-600 text-white h-screen">Auth page</div>
-        }
-      />
-      {/* <Route path="/" element={<AuthPage />} /> */}
-      <Route path="/unauthorized" element={<div>unauthorized</div>} />
-      {/* <Route path="/unauthorized" element={<Unauthorized />} /> */}
+      <Route path="/" element={<LoginPage />} />
+      <Route path="/register" element={<RegistrationPage />} />
 
       <Route element={<PersistLogin />}>
         <Route element={<RequireAuth />}>

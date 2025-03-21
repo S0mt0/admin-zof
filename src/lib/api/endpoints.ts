@@ -16,23 +16,23 @@ export const authEndpoints = {
 
   /** `GET` : Resend reset password code route*/
   resend_pr_code: "/auth/resend-pr-code",
+
+  /** `GET` : Logout route */
+  logout: "/auth/logout",
+
+  /** `GET` : Refresh token route */
+  refresh: "/auth/refresh-token",
 };
 
 export const userEndPoints = {
   /** `GET` : Profile lookup route */
-  profile: "/me",
+  profile: "/users/me",
 
   /** `DELETE` */
-  delete_account: "/me",
+  delete_account: "/users/me",
 
   /** `PATCH` : Profile update route */
-  update_profile: "/me",
-
-  /** `GET` : Logout route */
-  logout: "/me/logout",
-
-  /** `GET` : Refresh token route */
-  refresh: "/me/refresh-token",
+  update_profile: "/users/me",
 };
 
 export const otherEndPoints = {
