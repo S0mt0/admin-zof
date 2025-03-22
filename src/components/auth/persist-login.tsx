@@ -3,6 +3,7 @@ import { useLayoutEffect, useState } from "react";
 
 import { useAuthStore, useRefreshToken } from "@/lib/hooks";
 import { LoadingLogo } from "../ui/loading-logo";
+import { AnimationWrapper } from "../ui/animation-wrapper";
 
 export const PersistLogin = () => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -29,10 +30,12 @@ export const PersistLogin = () => {
       {!trusted_device ? (
         <Outlet />
       ) : isLoading ? (
-        <div className="h-screen text-sm w-full flex flex-col justify-center items-center gap-4">
-          <LoadingLogo />
-          <span>Please wait...</span>
-        </div>
+        <AnimationWrapper keyValue="loader">
+          <div className="h-screen text-sm w-full flex flex-col justify-center items-center gap-4">
+            <LoadingLogo />
+            <span className="font-indie text-lg">Please wait...</span>
+          </div>
+        </AnimationWrapper>
       ) : (
         <Outlet />
       )}

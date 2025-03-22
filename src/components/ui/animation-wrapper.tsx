@@ -5,6 +5,7 @@ type Props = {
   children: React.ReactNode | React.ReactNode[];
   initial?: Record<string, any>;
   animate?: Record<string, any>;
+  exit?: Record<string, any>;
   transition?: Record<string, any>;
   keyValue?: string;
 };
@@ -14,6 +15,7 @@ export const AnimationWrapper = ({
   animate = { opacity: 1 },
   transition = { duration: 1 },
   keyValue,
+  exit = { opacity: 0 },
 }: Props) => {
   return (
     <AnimatePresence>
@@ -21,6 +23,7 @@ export const AnimationWrapper = ({
         key={keyValue}
         initial={initial}
         animate={animate}
+        exit={exit}
         transition={transition}
       >
         {children}

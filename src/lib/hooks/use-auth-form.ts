@@ -48,16 +48,16 @@ export const useAuthForm = (type: "login" | "signup") => {
         setDto(initPayload);
 
         toast.success(res.data.response as string);
-        navigate("/dashboard");
+        navigate("/dashboard/blogs");
       }
     } catch (e: any) {
       if (isAxiosError(e)) {
-        toast.error(e.response?.data.response?.message || "Network Error");
+        toast.error(e.response?.data.response?.message || "Network Error", {
+          id: "auth-error",
+        });
       } else {
-        toast.error(e?.message);
+        toast.error(e?.message, { id: "auth-error" });
       }
-
-      console.error({ e });
     } finally {
       setIsLoading(false);
     }

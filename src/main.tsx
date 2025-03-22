@@ -13,6 +13,6 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
         <Route path="/*" element={<App />} />
       </Routes>
     </BrowserRouter>
-    <Toaster position="top-right" />
+    <Toaster position="top-center" />
   </React.StrictMode>
 );
