@@ -1,80 +1,67 @@
 import { isAxiosError } from "axios";
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useDebounceValue } from "usehooks-ts";
+import { useQuery } from "@tanstack/react-query";
 
 import { getAllBlogs } from "../api/public-requests";
 
 export const useBlogs = () => {
-  const [draft, setDraft] = useState(false);
   const [title, setTitle] = useState("");
-  const [debouncedTitle, setDebouncedTitle] = useState(title);
+  const [debouncedTitle] = useDebounceValue(title, 1200);
 
-  const [blogsData, setBlogsData] = useState<BlogsData | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
+  const [draft, setDraft] = useState(false);
 
-  useEffect(() => {
-    const timerId = setTimeout(() => {
-      setDebouncedTitle(title);
-    }, 1000);
-
-    return () => {
-      clearTimeout(timerId);
-    };
-  }, [title]);
-
-  const fetchBlogs = useCallback(
-    async (page: number) => {
-      setIsLoading(true);
-      setError(null);
-      try {
-        const data = (await getAllBlogs({
-          page,
-          draft,
-          title: debouncedTitle,
-          limit: 5,
-        }))!;
-
-        setBlogsData(data);
-      } catch (err) {
-        if (isAxiosError(err)) {
-          setError(
-            err.response?.data.response ||
-              err.message ||
-              "An unknown error occurred"
-          );
-        } else {
-          setError(
-            err instanceof Error ? err.message : "An unknown error occurred"
-          );
-        }
-      } finally {
-        setIsLoading(false);
-      }
-    },
-    [draft, debouncedTitle]
-  );
+  const {
+    data: blogsData,
+    isLoading,
+    error,
+  } = useQuery({
+    queryKey: ["blogs", { page: currentPage, title: debouncedTitle, draft }],
+    queryFn: () =>
+      getAllBlogs({
+        page: currentPage,
+        title: debouncedTitle,
+        draft,
+        limit: 5,
+      }),
+    staleTime: 60 * 60 * 1000, // 1 hour
+    retry: 5,
+  });
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
   };
 
-  useEffect(() => {
-    fetchBlogs(currentPage);
-  }, [currentPage, fetchBlogs]);
+  const handleTitleChange = (title: string) => {
+    setTitle(title);
+  };
+
+  const toggleTabs = (draft: boolean) => {
+    setDraft(draft);
+  };
 
   useEffect(() => {
-    if (debouncedTitle !== title) setCurrentPage(1);
-  }, [debouncedTitle, title]);
+    setCurrentPage(1);
+  }, [debouncedTitle]);
 
   return {
-    setDraft,
-    setTitle,
+    toggleTabs,
     blogsData,
     isLoading,
-    error,
     title,
     handlePageChange,
+    handleTitleChange,
+    draft,
+
+    error: error
+      ? isAxiosError(error)
+        ? error.response?.data.response ||
+          error.message ||
+          "An unknown error occurred"
+        : error instanceof Error
+        ? error.message
+        : "An unknown error occurred"
+      : null,
   };
 };

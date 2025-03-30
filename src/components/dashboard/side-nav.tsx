@@ -29,7 +29,7 @@ export const SideNav = () => {
               className={cn(
                 "p-4 hover:bg-gray-50 transition-colors",
                 isActive &&
-                  "bg-green-50 border-r-[4px] border-green-700 hover:bg-green-50"
+                  "bg-green-50 border-r-[4px] border-green-600 hover:bg-green-50"
               )}
             >
               <Link to={href} className="flex items-center justify-start gap-2">
@@ -52,7 +52,7 @@ export const SideNav = () => {
               className={cn(
                 "p-4 hover:bg-gray-50 transition-colors",
                 isActive &&
-                  "bg-green-50 border-r-[4px] border-green-700 hover:bg-green-50"
+                  "bg-green-50 border-r-[4px] border-green-600 hover:bg-green-50"
               )}
             >
               <Link to={href} className="flex items-center justify-start gap-2">
