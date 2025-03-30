@@ -18,7 +18,7 @@ export const AnimationWrapper = ({
   exit = { opacity: 0 },
 }: Props) => {
   return (
-    <AnimatePresence>
+    <AnimatePresence mode="wait">
       <motion.div
         key={keyValue}
         initial={initial}

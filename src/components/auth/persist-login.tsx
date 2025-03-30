@@ -2,8 +2,7 @@ import { Outlet } from "react-router-dom";
 import { useLayoutEffect, useState } from "react";
 
 import { useAuthStore, useRefreshToken } from "@/lib/hooks";
-import { LoadingLogo } from "../ui/loading-logo";
-import { AnimationWrapper } from "../ui/animation-wrapper";
+import { AppLoader } from "../ui/app-loader";
 
 export const PersistLogin = () => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -26,19 +25,6 @@ export const PersistLogin = () => {
   }, [refresh, accessToken, isLoggedIn]);
 
   return (
-    <>
-      {!trusted_device ? (
-        <Outlet />
-      ) : isLoading ? (
-        <AnimationWrapper keyValue="loader">
-          <div className="h-screen text-sm w-full flex flex-col justify-center items-center gap-4">
-            <LoadingLogo />
-            <span className="font-indie text-lg">Please wait...</span>
-          </div>
-        </AnimationWrapper>
-      ) : (
-        <Outlet />
-      )}
-    </>
+    <>{!trusted_device ? <Outlet /> : isLoading ? <AppLoader /> : <Outlet />}</>
   );
 };

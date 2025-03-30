@@ -35,7 +35,7 @@ export const resetPassword = async (dto: NewPasswordDTO) => {
 };
 
 export const refreshToken = async () => {
-  return await axiosPrivate.get<ApiResponse<User>>(authEndpoints.refresh);
+  return await axiosPrivate.get<ApiResponse<string>>(authEndpoints.refresh);
 };
 
 export const logout = async () => {

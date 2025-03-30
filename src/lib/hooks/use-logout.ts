@@ -1,6 +1,6 @@
 import toast from "react-hot-toast";
 
-import { logout } from "../api/requests";
+import { logout } from "../api/public-requests";
 import { useAuthStore } from "./use-store";
 
 export const useLogout = () => {

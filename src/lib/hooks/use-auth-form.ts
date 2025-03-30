@@ -5,7 +5,7 @@ import { isEmail, isStrongPassword } from "validator";
 import toast from "react-hot-toast";
 import { isAxiosError } from "axios";
 
-import { login, signup } from "../api/requests";
+import { login, signup } from "../api/public-requests";
 import { useAuthStore, useProfileStore } from "./use-store";
 
 const initPayload = { email: "", password: "" };
