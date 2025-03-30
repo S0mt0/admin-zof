@@ -1,7 +1,8 @@
 import { Outlet } from "react-router-dom";
-import { useCallback, useEffect } from "react";
+import { useEffect } from "react";
 import toast from "react-hot-toast";
 import { isAxiosError } from "axios";
+import { useQuery } from "@tanstack/react-query";
 
 import { SideNav } from "./side-nav";
 import { AnimationWrapper } from "../ui/animation-wrapper";
@@ -11,32 +12,26 @@ export const DashboardLayout = () => {
   const { getProfile } = useUserRequests();
   const { setProfile } = useProfileStore();
 
-  const _setProfile = useCallback(setProfile, [setProfile]);
+  const { error } = useQuery({
+    queryKey: ["profile"],
+    queryFn: async () => {
+      const data = (await getProfile())!;
+      setProfile(data);
+      return data;
+    },
+  });
 
   useEffect(() => {
-    (async () => {
-      try {
-        const profile = (await getProfile())!;
-        _setProfile(profile);
-      } catch (err) {
-        if (isAxiosError(err)) {
-          const message = err.response?.data.response || "Network error";
+    if (error) {
+      const message = isAxiosError(error)
+        ? error.response?.data.response || "Network error"
+        : error instanceof Error
+        ? error.message
+        : "Unable to fetch profile. Please refresh your browser.";
 
-          toast.error(message, { id: "profile_error" });
-        } else {
-          toast.error(
-            err instanceof Error
-              ? err.message
-              : "Unable to fetch profile. Please refresh your browser.",
-            {
-              id: "profile_error",
-            }
-          );
-        }
-      }
-    })();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [_setProfile]);
+      toast.error(message, { id: "profile_error" });
+    }
+  }, [error]);
 
   return (
     <AnimationWrapper keyValue="dashboard-layout">

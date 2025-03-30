@@ -1,11 +1,11 @@
 import { isAxiosError } from "axios";
 import { useEffect, useState } from "react";
 import { useDebounceValue } from "usehooks-ts";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 
 import { getAllBlogs } from "../api/public-requests";
 
-export const useBlogs = () => {
+export const useGetBlogs = () => {
   const [title, setTitle] = useState("");
   const [debouncedTitle] = useDebounceValue(title, 1200);
 
@@ -25,8 +25,6 @@ export const useBlogs = () => {
         draft,
         limit: 5,
       }),
-    staleTime: 60 * 60 * 1000, // 1 hour
-    retry: 5,
   });
 
   const handlePageChange = (page: number) => {
@@ -41,9 +39,51 @@ export const useBlogs = () => {
     setDraft(draft);
   };
 
+  const queryClient = useQueryClient();
+
+  const handleNextPageHover = (nextPage?: number) => {
+    if (blogsData && currentPage < blogsData.pagination.totalPages) {
+      const page = nextPage || currentPage + 1;
+
+      queryClient.prefetchQuery({
+        queryKey: ["blogs", { page, title: debouncedTitle, draft }],
+        queryFn: () =>
+          getAllBlogs({
+            page,
+            title: debouncedTitle,
+            draft,
+            limit: 5,
+          }),
+      });
+    }
+  };
+
+  // Prefetch the next page when currentPage or blogsData changes
+  useEffect(() => {
+    const prefetchNextPage = async () => {
+      if (blogsData && currentPage < blogsData.pagination.totalPages) {
+        await queryClient.prefetchQuery({
+          queryKey: [
+            "blogs",
+            { page: currentPage + 1, title: debouncedTitle, draft },
+          ],
+          queryFn: () =>
+            getAllBlogs({
+              page: currentPage + 1,
+              title: debouncedTitle,
+              draft,
+              limit: 5,
+            }),
+        });
+      }
+    };
+
+    prefetchNextPage();
+  }, [currentPage, blogsData, queryClient, debouncedTitle, draft]);
+
   useEffect(() => {
     setCurrentPage(1);
-  }, [debouncedTitle]);
+  }, [debouncedTitle, draft]);
 
   return {
     toggleTabs,
@@ -53,6 +93,7 @@ export const useBlogs = () => {
     handlePageChange,
     handleTitleChange,
     draft,
+    handleNextPageHover,
 
     error: error
       ? isAxiosError(error)

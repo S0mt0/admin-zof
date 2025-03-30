@@ -3,7 +3,7 @@ import { Loader2, Search } from "lucide-react";
 import { Pagination } from "@/components/ui/pagination";
 import { AppError } from "@/components/ui/app-error";
 import { Input } from "@/components/ui/input";
-import { useBlogs } from "@/lib/hooks";
+import { useGetBlogs } from "@/lib/hooks";
 import { AnimationWrapper } from "@/components/ui/animation-wrapper";
 import { cn } from "@/lib/utils";
 
@@ -17,7 +17,8 @@ export const BlogsPage = () => {
     handleTitleChange,
     toggleTabs,
     draft,
-  } = useBlogs();
+    handleNextPageHover,
+  } = useGetBlogs();
 
   return (
     <main className="p-2">
@@ -89,6 +90,7 @@ export const BlogsPage = () => {
               currentPage={blogsData.pagination.page}
               totalPages={blogsData.pagination.totalPages}
               onPageChange={handlePageChange}
+              onMouseEnter={handleNextPageHover}
             />
           </>
         ) : (

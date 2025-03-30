@@ -1,7 +1,10 @@
+import { cn } from "@/lib/utils";
+
 interface PaginationProps {
   currentPage: number;
   totalPages: number;
   onPageChange: (page: number) => void;
+  onMouseEnter?: (page?: number) => void;
   maxVisiblePages?: number;
 }
 
@@ -9,6 +12,7 @@ export const Pagination = ({
   currentPage,
   totalPages,
   onPageChange,
+  onMouseEnter,
   maxVisiblePages = 5,
 }: PaginationProps) => {
   if (totalPages <= 1) return null;
@@ -34,15 +38,18 @@ export const Pagination = ({
   const visiblePages = getVisiblePages();
 
   return (
-    <div className="flex items-center justify-center gap-1 my-4">
+    <div className="flex items-center justify-center gap-2.5 my-10">
       {/* Previous Button */}
       <button
         onClick={() => onPageChange(currentPage - 1)}
         disabled={currentPage === 1}
-        className="px-3 py-1 rounded disabled:opacity-50"
+        className={cn(
+          "px-3 py-1 rounded disabled:opacity-20 hover:bg-green-700/10 transition disabled:hover:bg-transparent",
+          currentPage === 1 ? "cursor-default" : "cursor-pointer"
+        )}
         aria-label="Go to previous page"
       >
-        &lt;
+        &lt; Previous
       </button>
 
       {/* First Page */}
@@ -50,9 +57,10 @@ export const Pagination = ({
         <>
           <button
             onClick={() => onPageChange(1)}
-            className={`px-3 py-1 rounded ${
-              currentPage === 1 ? "bg-blue-500 text-white" : ""
-            }`}
+            className={cn(
+              "px-3 py-1 rounded cursor-pointer hover:bg-green-700/10 transition",
+              currentPage === 1 && "bg-green-700 text-white hover:bg-green-700"
+            )}
           >
             1
           </button>
@@ -65,9 +73,11 @@ export const Pagination = ({
         <button
           key={page}
           onClick={() => onPageChange(page)}
-          className={`px-3 py-1 rounded ${
-            currentPage === page ? "bg-blue-500 text-white" : ""
-          }`}
+          onMouseEnter={onMouseEnter ? () => onMouseEnter(page) : undefined}
+          className={cn(
+            "px-3 py-1 rounded cursor-pointer hover:bg-green-700/10 transition",
+            currentPage === page && "bg-green-700 text-white hover:bg-green-700"
+          )}
         >
           {page}
         </button>
@@ -81,9 +91,14 @@ export const Pagination = ({
           )}
           <button
             onClick={() => onPageChange(totalPages)}
-            className={`px-3 py-1 rounded ${
-              currentPage === totalPages ? "bg-blue-500 text-white" : ""
-            }`}
+            onMouseEnter={
+              onMouseEnter ? () => onMouseEnter(totalPages) : undefined
+            }
+            className={cn(
+              "px-3 py-1 rounded cursor-pointer hover:bg-green-700/10 transition",
+              currentPage === totalPages &&
+                "bg-green-700 text-white hover:bg-green-700"
+            )}
           >
             {totalPages}
           </button>
@@ -93,11 +108,15 @@ export const Pagination = ({
       {/* Next Button */}
       <button
         onClick={() => onPageChange(currentPage + 1)}
+        onMouseEnter={onMouseEnter ? () => onMouseEnter() : undefined}
         disabled={currentPage === totalPages}
-        className="px-3 py-1 rounded disabled:opacity-50"
+        className={cn(
+          "px-3 py-1 rounded disabled:opacity-20 cursor-pointer hover:bg-green-700/10 transition disabled:hover:bg-transparent",
+          currentPage === totalPages && "cursor-default"
+        )}
         aria-label="Go to next page"
       >
-        &gt;
+        Next &gt;
       </button>
     </div>
   );
