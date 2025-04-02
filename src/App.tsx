@@ -6,6 +6,8 @@ import { LoginPage } from "./pages/login";
 import { DashboardLayout } from "./components/dashboard";
 import { NotFoundPage } from "./pages/not-found";
 import { BlogsPage } from "./pages/blogs";
+import { SingleBlogPage } from "./pages/blog";
+import { Editor } from "./pages/editor";
 
 function App() {
   return (
@@ -17,7 +19,12 @@ function App() {
         <Route element={<RequireAuth />}>
           <Route path="/dashboard" element={<DashboardLayout />}>
             <Route path="blogs" element={<BlogsPage />} />
-            <Route path="blogs/:id" element={<div>single blog page</div>} />
+            <Route path="blogs/editor" element={<Editor />} />
+            <Route path="blogs/:blogId" element={<SingleBlogPage />} />
+            <Route
+              path="blogs/editor/:blogId"
+              element={<div>edit single blog page</div>}
+            />
 
             <Route path="events" element={<div>events page</div>} />
             <Route path="events/:id" element={<div>single blog page</div>} />

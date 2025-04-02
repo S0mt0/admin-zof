@@ -2,15 +2,20 @@ import { isAxiosError } from "axios";
 import { useEffect, useState } from "react";
 import { useDebounceValue } from "usehooks-ts";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useSearchParams } from "react-router-dom";
 
-import { getAllBlogs } from "../api/public-requests";
+import { getAllBlogs } from "../api/requests";
 
 export const useGetBlogs = () => {
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  const param = searchParams.get("draft");
+  const draft = param ? (param === "true" ? true : false) : false;
+
   const [title, setTitle] = useState("");
   const [debouncedTitle] = useDebounceValue(title, 1200);
 
   const [currentPage, setCurrentPage] = useState(1);
-  const [draft, setDraft] = useState(false);
 
   const {
     data: blogsData,
@@ -22,8 +27,8 @@ export const useGetBlogs = () => {
       getAllBlogs({
         page: currentPage,
         title: debouncedTitle,
-        draft,
         limit: 5,
+        draft,
       }),
   });
 
@@ -36,7 +41,7 @@ export const useGetBlogs = () => {
   };
 
   const toggleTabs = (draft: boolean) => {
-    setDraft(draft);
+    setSearchParams({ draft: String(draft) });
   };
 
   const queryClient = useQueryClient();
@@ -71,8 +76,8 @@ export const useGetBlogs = () => {
             getAllBlogs({
               page: currentPage + 1,
               title: debouncedTitle,
-              draft,
               limit: 5,
+              draft,
             }),
         });
       }

@@ -1,36 +1,31 @@
 import { Outlet } from "react-router-dom";
 import { useEffect } from "react";
 import toast from "react-hot-toast";
-import { isAxiosError } from "axios";
 import { useQuery } from "@tanstack/react-query";
 
 import { SideNav } from "./side-nav";
 import { AnimationWrapper } from "../ui/animation-wrapper";
-import { useProfileStore, useUserRequests } from "@/lib/hooks";
+import { useAuthStore, useProfileStore } from "@/lib/hooks";
+import { getProfile } from "@/lib/api/requests";
 
 export const DashboardLayout = () => {
-  const { getProfile } = useUserRequests();
   const { setProfile } = useProfileStore();
+  const { accessToken } = useAuthStore();
 
   const { error } = useQuery({
     queryKey: ["profile"],
     queryFn: async () => {
-      const data = (await getProfile())!;
+      const data = (await getProfile(accessToken!))!;
       setProfile(data);
       return data;
     },
   });
 
   useEffect(() => {
-    if (error) {
-      const message = isAxiosError(error)
-        ? error.response?.data.response || "Network error"
-        : error instanceof Error
-        ? error.message
-        : "Unable to fetch profile. Please refresh your browser.";
-
-      toast.error(message, { id: "profile_error" });
-    }
+    if (error)
+      toast.error("Unable to load profile. Please refresh your browser.", {
+        id: "profile_error",
+      });
   }, [error]);
 
   return (

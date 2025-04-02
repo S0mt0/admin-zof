@@ -8,7 +8,7 @@ export const SideNav = () => {
   const pathname = useLocation().pathname;
 
   return (
-    <nav className="sticky w-full top-4 min-w-[200px] overflow-y-auto">
+    <nav className="sticky w-full top-4 overflow-y-auto">
       <div className="flex items-center justify-center mb-10">
         <img
           src="/zof-logo.png"

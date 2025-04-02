@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+
 import notFoundImg from "../../assets/404.jpg";
 
 export const NotFoundPage = () => {
@@ -12,7 +13,7 @@ export const NotFoundPage = () => {
       <p className="text-sm mt-4">
         The page you are looking for was not found. Try{" "}
         <Link
-          to="/dashboard"
+          to="/dashboard/blogs"
           className="font-semibold underline hover:text-sky-600"
         >
           the Home Page.

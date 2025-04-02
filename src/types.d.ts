@@ -78,7 +78,7 @@ interface TBlog {
   desc: string;
   draft: boolean;
   featured: boolean;
-  content: { blocks: Block[]; time: number; version: string };
+  content: { blocks: Block[]; time?: number; version?: string };
   createdAt: string;
   updatedAt: string;
 }
@@ -117,4 +117,22 @@ interface ITeam {
   bio: string;
 
   [key: string]: any;
+}
+
+type EditorState = "editor" | "publish-form";
+
+interface EditorContextType {
+  blogData: BlogStructure;
+  setBlogData: (data: BlogStructure) => void;
+  editorState: EditorState;
+  setEditorState: (state: EditorState) => void;
+}
+
+interface BlogStructure {
+  title: string;
+  bannerUrl: string;
+  desc: string;
+  draft: boolean;
+  featured: boolean;
+  content: { blocks: any[] } & { [key: string]: any };
 }
