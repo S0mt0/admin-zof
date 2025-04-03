@@ -51,7 +51,7 @@ interface BlockData {
   text?: string;
   level?: number;
   style?: "unordered" | "ordered";
-  items?: string[];
+  items?: { content: string; [key: string]: any }[];
   file?: {
     url: string;
     size?: number;
@@ -71,17 +71,11 @@ interface Block {
 }
 
 // NGO blog
-interface TBlog {
+type TBlog = BlogStructure & {
   blogId: string;
-  title: string;
-  bannerUrl: string;
-  desc: string;
-  draft: boolean;
-  featured: boolean;
-  content: { blocks: Block[]; time?: number; version?: string };
   createdAt: string;
   updatedAt: string;
-}
+};
 
 type TBlogSnippet = Omit<TBlog, "content">;
 
@@ -126,6 +120,8 @@ interface EditorContextType {
   setBlogData: (data: BlogStructure) => void;
   editorState: EditorState;
   setEditorState: (state: EditorState) => void;
+  draftState: boolean;
+  setDraftState: (draft: boolean) => void;
 }
 
 interface BlogStructure {

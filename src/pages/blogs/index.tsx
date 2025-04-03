@@ -84,12 +84,7 @@ export const BlogsPage = () => {
               {/* Blog List */}
               <div className="space-y-4">
                 {blogsData.blogs.map((blog, i) => (
-                  <AnimationWrapper
-                    key={blog.title}
-                    transition={{ delay: i * 0.1 }}
-                  >
-                    <BlogPreviewCard {...blog} index={i + 1} />
-                  </AnimationWrapper>
+                  <BlogPreviewCard {...blog} index={i + 1} key={blog.title} />
                 ))}
               </div>
               {/* Pagination */}

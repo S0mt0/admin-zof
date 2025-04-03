@@ -38,7 +38,7 @@ export const userEndPoints = {
 export const otherEndPoints = {
   blogs: "/blogs",
   /** `PUT` and `DELETE` */
-  blog_banner: "/blogs/upload-img",
+  upload: "/blogs/upload-img",
   events: "/events",
   team: "/team",
 };

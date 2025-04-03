@@ -55,20 +55,29 @@ export const deleteBlog = async (accessToken: string, blogId: string) => {
   );
 };
 
-export const uploadBlogBanner = async (accessToken: string, file: File) => {
+export const uploadImage = async (file: File) => {
   const formData = new FormData();
   formData.append("file", file);
 
   return (
-    await axiosPrivate.put<ApiResponse<{ bannerUrl: string }>>(
-      otherEndPoints.blog_banner,
+    await axiosPrivate.put<ApiResponse<{ url: string }>>(
+      otherEndPoints.upload,
       formData,
       {
         headers: {
-          Authorization: `Bearer ${accessToken}`,
           "Content-Type": "multipart/form-data",
         },
       }
     )
-  ).data;
+  ).data.data?.url as string;
+};
+
+export const createBlog = async (accessToken: string, dto: BlogStructure) => {
+  return (
+    await axiosPrivate.post<ApiResponse<TBlog>>(otherEndPoints.blogs, dto, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    })
+  ).data.data;
 };
