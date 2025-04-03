@@ -23,14 +23,6 @@ export const SingleBlogPage = () => {
     queryFn: () => getBlog(blogId),
   });
 
-  const {
-    bannerUrl,
-    createdAt,
-    title,
-    updatedAt,
-    content: { blocks },
-  } = blog as TBlog;
-
   const { accessToken } = useAuthStore();
   const queryClient = useQueryClient();
   const navigate = useNavigate();
@@ -61,16 +53,27 @@ export const SingleBlogPage = () => {
     },
   });
 
-  const publishDate = format(new Date(createdAt), "d MMM, yyyy. hh:mm aa");
-  const updateDate = format(new Date(updatedAt), "d MMM, yyyy. hh:mm aa");
+  if (isLoading)
+    return (
+      <div className="flex items-center justify-center p-4">
+        <Loader2 className="animate-spin" />
+      </div>
+    );
+
+  if (error || !blog) return <ItemNotFound item="Blog" />;
+
+  const {
+    bannerUrl,
+    createdAt,
+    title,
+    updatedAt,
+    content: { blocks },
+  } = blog;
+
+  const publishDate = format(new Date(createdAt), "d MMM yyyy, hh:mm aa");
+  const updateDate = format(new Date(updatedAt), "d MMM yyyy, hh:mm aa");
   const hasBeenUpdated = createdAt !== updatedAt;
-  return isLoading ? (
-    <div className="flex items-center justify-center p-4">
-      <Loader2 className="animate-spin" />
-    </div>
-  ) : error || !blog ? (
-    <ItemNotFound item="Blog" />
-  ) : (
+  return (
     <article className="max-w-3xl mx-auto text-sm py-10">
       <div className="my-10 flex items-center justify-end gap-4">
         <button
