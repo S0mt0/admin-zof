@@ -1,9 +1,9 @@
 import { axiosPrivate } from "../config";
-import { userEndPoints } from "../endpoints";
+import { otherEndPoints } from "../endpoints";
 
 export const getProfile = async (accessToken: string) => {
   return (
-    await axiosPrivate.get<ApiResponse<User>>(userEndPoints.profile, {
+    await axiosPrivate.get<ApiResponse<User>>(otherEndPoints.user, {
       headers: {
         Authorization: `Bearer ${accessToken}`,
       },
@@ -12,27 +12,20 @@ export const getProfile = async (accessToken: string) => {
 };
 
 export const deleteAccount = async (accessToken: string) => {
-  return await axiosPrivate.delete<ApiResponse<string>>(
-    userEndPoints.delete_account,
-    {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
-    }
-  );
+  return await axiosPrivate.delete<ApiResponse<string>>(otherEndPoints.user, {
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+  });
 };
 
 export const updateProfile = async (
   accessToken: string,
   dto: UpdateUserDto
 ) => {
-  return await axiosPrivate.patch<ApiResponse<User>>(
-    userEndPoints.update_profile,
-    dto,
-    {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
-    }
-  );
+  return await axiosPrivate.patch<ApiResponse<User>>(otherEndPoints.user, dto, {
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+  });
 };

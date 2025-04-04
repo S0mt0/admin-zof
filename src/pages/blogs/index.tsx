@@ -1,5 +1,3 @@
-import toast from "react-hot-toast";
-import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Edit, Loader2, Search } from "lucide-react";
 
@@ -23,10 +21,6 @@ export const BlogsPage = () => {
     draft,
     handleNextPageHover,
   } = useGetBlogs();
-
-  useEffect(() => {
-    if (error) toast.error(error, { id: "blogs-error" });
-  }, [error]);
 
   return (
     <AnimationWrapper keyValue="blogs">
@@ -87,6 +81,7 @@ export const BlogsPage = () => {
                   <BlogPreviewCard {...blog} index={i + 1} key={blog.title} />
                 ))}
               </div>
+
               {/* Pagination */}
               <Pagination
                 currentPage={blogsData.pagination.page}

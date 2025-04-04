@@ -12,10 +12,10 @@ export const authEndpoints = {
   reset_password: "/auth/reset-password",
 
   /** `POST` : Verify reset password code route*/
-  verify_pr_code: "/auth/verify-pr-code",
+  verify_otp: "/auth/verify-pr-code",
 
   /** `GET` : Resend reset password code route*/
-  resend_pr_code: "/auth/resend-pr-code",
+  resend_otp: "/auth/resend-pr-code",
 
   /** `GET` : Logout route */
   logout: "/auth/logout",
@@ -24,21 +24,12 @@ export const authEndpoints = {
   refresh: "/auth/refresh-token",
 };
 
-export const userEndPoints = {
-  /** `GET` : Profile lookup route */
-  profile: "/users/me",
-
-  /** `DELETE` */
-  delete_account: "/users/me",
-
-  /** `PATCH` : Profile update route */
-  update_profile: "/users/me",
-};
-
 export const otherEndPoints = {
   blogs: "/blogs",
   /** `PUT` and `DELETE` */
   upload: "/blogs/upload-img",
   events: "/events",
   team: "/team",
+  /** `PATCH`, `GET` and `DELETE` */
+  user: "/users/me",
 };

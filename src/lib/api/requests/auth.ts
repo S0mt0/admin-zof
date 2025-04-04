@@ -1,31 +1,29 @@
 import { axiosPrivate } from "../config";
 import { authEndpoints } from "../endpoints";
 
-export const signup = async (dto: AuthDto) => {
+export const signup = async (dto: SignUpDto) => {
   return (
     await axiosPrivate.post<ApiResponse<string>>(authEndpoints.signup, dto)
   ).data;
 };
 
-export const login = async (dto: AuthDto) => {
+export const login = async (dto: LoginDto) => {
   return await axiosPrivate.post<ApiResponse<User>>(authEndpoints.login, dto);
 };
 
-export const forgotPassword = async (dto: Pick<AuthDto, "email">) => {
+export const forgotPassword = async (dto: Pick<LoginDto, "email">) => {
   return (
     await axiosPrivate.post<ApiResponse>(authEndpoints.forgot_password, dto)
   ).data;
 };
 
-export const resendPRCode = async () => {
-  return (await axiosPrivate.get<ApiResponse>(authEndpoints.resend_pr_code))
-    .data;
+export const resendOTP = async () => {
+  return (await axiosPrivate.get<ApiResponse>(authEndpoints.resend_otp)).data;
 };
 
-export const verifyPRCode = async (dto: { rp_code: string }) => {
-  return (
-    await axiosPrivate.post<ApiResponse>(authEndpoints.verify_pr_code, dto)
-  ).data;
+export const verifyOTP = async (dto: { rp_code: string }) => {
+  return (await axiosPrivate.post<ApiResponse>(authEndpoints.verify_otp, dto))
+    .data;
 };
 
 export const resetPassword = async (dto: NewPasswordDTO) => {

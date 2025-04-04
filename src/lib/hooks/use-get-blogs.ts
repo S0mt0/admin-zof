@@ -1,8 +1,8 @@
-import { isAxiosError } from "axios";
 import { useEffect, useState } from "react";
 import { useDebounceValue } from "usehooks-ts";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useSearchParams } from "react-router-dom";
+import toast from "react-hot-toast";
 
 import { getAllBlogs } from "../api/requests";
 
@@ -90,6 +90,13 @@ export const useGetBlogs = () => {
     setCurrentPage(1);
   }, [debouncedTitle, draft]);
 
+  useEffect(() => {
+    if (error) {
+      console.error({ error });
+      toast.error("Error fetching blogs", { id: "blogs-error" });
+    }
+  }, [error]);
+
   return {
     toggleTabs,
     blogsData,
@@ -99,15 +106,6 @@ export const useGetBlogs = () => {
     handleTitleChange,
     draft,
     handleNextPageHover,
-
-    error: error
-      ? isAxiosError(error)
-        ? error.response?.data.response ||
-          error.message ||
-          "An unknown error occurred"
-        : error instanceof Error
-        ? error.message
-        : "An unknown error occurred"
-      : null,
+    error,
   };
 };

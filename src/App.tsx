@@ -8,32 +8,37 @@ import { NotFoundPage } from "./pages/not-found";
 import { BlogsPage } from "./pages/blogs";
 import { SingleBlogPage } from "./pages/blog";
 import { Editor } from "./pages/editor";
+import { ForgotPasswordPage } from "./pages/forgot-password";
+import { VerifyOTPPage } from "./pages/verify-otp";
+import { ResetPasswordPage } from "./pages/reset-password";
 
 function App() {
   return (
     <Routes>
       <Route path="/" element={<LoginPage />} />
       <Route path="/register" element={<RegistrationPage />} />
+      <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+      <Route path="/verify-otp" element={<VerifyOTPPage />} />
+      <Route path="/reset-password" element={<ResetPasswordPage />} />
 
       <Route element={<PersistLogin />}>
         <Route element={<RequireAuth />}>
           <Route path="/dashboard" element={<DashboardLayout />}>
             <Route path="blogs" element={<BlogsPage />} />
-            <Route path="blogs/editor" element={<Editor />} />
+            <Route path="blogs/editor" element={<Editor type="new" />} />
             <Route path="blogs/:blogId" element={<SingleBlogPage />} />
             <Route
               path="blogs/editor/:blogId"
-              element={<div>edit single blog page</div>}
+              element={<Editor type="edit" />}
             />
 
             <Route path="events" element={<div>events page</div>} />
             <Route path="events/:id" element={<div>single blog page</div>} />
-
             <Route path="team" element={<div>team page</div>} />
             <Route path="team/:id" element={<div>single blog page</div>} />
-
             <Route path="profile" element={<div>profile page</div>} />
             <Route path="change-password" element={<div>passwor page</div>} />
+
             <Route path="*" element={<NotFoundPage />} />
           </Route>
         </Route>

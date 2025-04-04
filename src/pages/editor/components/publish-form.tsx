@@ -77,6 +77,7 @@ export const PublishForm = () => {
               type="checkbox"
               id="featured"
               onChange={handleFeaturedChange}
+              checked={blogData.featured}
             />
             <label htmlFor="featured" className="cursor-pointer">
               Featured

@@ -1,7 +1,7 @@
-import { KeyRoundIcon, Mail } from "lucide-react";
+import { KeyboardIcon, KeyRoundIcon, Mail } from "lucide-react";
 import { Link } from "react-router-dom";
 
-import googleIcon from "../../assets/google-icon.svg";
+// import googleIcon from "../../assets/google-icon.svg";
 
 import { Button } from "@/components/ui/button";
 import { AnimationWrapper } from "@/components/ui/animation-wrapper";
@@ -45,13 +45,29 @@ export const AuthForm = ({ type = "login" }: { type: "login" | "signup" }) => {
             id="password"
             type="password"
             name="password"
-            placeholder="*******"
+            placeholder={type === "signup" ? "Password" : "******"}
             value={dto.password}
             onChange={(e) =>
               setDto((curr) => ({ ...curr, password: e.target.value }))
             }
             icon={KeyRoundIcon}
           />
+          {type === "signup" && (
+            <InputBox
+              id="password"
+              type="password"
+              name="confirm_password"
+              placeholder="Confirm Password"
+              value={dto.password}
+              onChange={(e) =>
+                setDto((curr) => ({
+                  ...curr,
+                  confirm_password: e.target.value,
+                }))
+              }
+              icon={KeyboardIcon}
+            />
+          )}
 
           {type === "login" && (
             <div className="my-2 flex items-center justify-between text-xs">
@@ -92,7 +108,7 @@ export const AuthForm = ({ type = "login" }: { type: "login" | "signup" }) => {
               "Register"
             )}
           </Button>
-          <div className="relative w-full my-6 flex opacity-10 uppercase font-bold gap-2 items-center justify-center">
+          {/* <div className="relative w-full my-6 flex opacity-10 uppercase font-bold gap-2 items-center justify-center">
             <hr className="w-1/2 border-black" />
             <p>or</p>
             <hr className="w-1/2 border-black" />
@@ -103,7 +119,7 @@ export const AuthForm = ({ type = "login" }: { type: "login" | "signup" }) => {
           >
             <img src={googleIcon} alt="google" className="w-5 h-auto" />{" "}
             continue with google
-          </Button>
+          </Button> */}
 
           {type === "login" ? (
             <p className="text-xs text-center mt-4">

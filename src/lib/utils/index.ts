@@ -1,10 +1,9 @@
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
+import { format } from "date-fns";
 import {
   BlockToolConstructable,
   InlineToolConstructable,
-  ToolConstructable,
-  ToolSettings,
 } from "@editorjs/editorjs";
 
 import ImageTool from "@editorjs/image";
@@ -13,25 +12,20 @@ import ListTool from "@editorjs/list";
 import QuoteTool from "@editorjs/quote";
 import InlineCodeTool from "@editorjs/inline-code";
 
+import { uploadImage } from "../api/requests";
 // import Embed from "@editorjs/embed";
 // import Marker from "@editorjs/marker";
 // import Link from "@editorjs/link";
 
-import { uploadImage } from "../api/requests";
+export function cn(...inputs: ClassValue[]) {
+  return twMerge(clsx(inputs));
+}
 
 const Image: BlockToolConstructable = ImageTool;
 const Quote: BlockToolConstructable = QuoteTool;
 const InlineCode: InlineToolConstructable = InlineCodeTool;
 const Header = HeaderTool as unknown as BlockToolConstructable;
 const List = ListTool as unknown as BlockToolConstructable;
-
-interface EditorTools {
-  [toolName: string]: ToolConstructable | ToolSettings;
-}
-
-export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs));
-}
 
 export const editorTools: EditorTools = {
   inlineCode: InlineCode,
@@ -90,3 +84,6 @@ export const editorTools: EditorTools = {
   // marker: Marker,
   // link: Link,
 };
+
+export const formatAppDate = (dateString: string) =>
+  format(new Date(dateString), "d MMM yyyy, hh:mm aa");

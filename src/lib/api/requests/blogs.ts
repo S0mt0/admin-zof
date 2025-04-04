@@ -29,7 +29,7 @@ export const getBlog = async (blogId: string) =>
 export const updateBlog = async (
   accessToken: string,
   blogId: string,
-  dto: Record<string, any>
+  dto: Partial<BlogStructure>
 ) => {
   return (
     await axiosPrivate.patch<ApiResponse<TBlog>>(

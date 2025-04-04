@@ -6,10 +6,10 @@ import toast from "react-hot-toast";
 import { initBlogStructure } from "@/pages/editor/components";
 import { useEditorContext } from "./use-contexts";
 import { useAuthStore } from "./use-store";
-import { createBlog } from "../api/requests";
+import { createBlog, updateBlog } from "../api/requests";
 
 export const usePublishBlogForm = () => {
-  const { blogData, setBlogData, setEditorState, draftState } =
+  const { blogData, setBlogData, setEditorState, draftState, type } =
     useEditorContext();
 
   const descCharLimit = 200;
@@ -49,20 +49,22 @@ export const usePublishBlogForm = () => {
       if (draftState) {
         dto = { ...dto, draft: true };
       }
-      return createBlog(accessToken!, dto);
+      return type === "new"
+        ? createBlog(accessToken!, dto)
+        : updateBlog(accessToken!, dto.blogId!, dto);
     },
     onError: (error) => {
       console.error({ error });
 
       if (isAxiosError(error)) {
         const response =
-          error.response?.data?.response ||
-          error.response?.data?.response?.message;
+          error.response?.data?.response?.message ||
+          error.response?.data?.response;
 
         const message =
           typeof response === "string"
             ? response
-            : JSON.stringify(response) || error.name;
+            : JSON.stringify(response) || error.message;
         toast.error(message);
       } else {
         toast.error(error.message);

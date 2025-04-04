@@ -1,12 +1,8 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { format } from "date-fns";
 import { Link } from "react-router-dom";
-import toast from "react-hot-toast";
 
 import { AnimationWrapper } from "@/components/ui/animation-wrapper";
-import { useAuthStore } from "@/lib/hooks";
-import { isAxiosError } from "axios";
-import { deleteBlog } from "@/lib/api/requests";
+import { useDeleteBlog } from "@/lib/hooks";
+import { formatAppDate } from "@/lib/utils";
 
 export const BlogPreviewCard = ({
   bannerUrl,
@@ -18,35 +14,9 @@ export const BlogPreviewCard = ({
   desc,
   featured,
 }: TBlogSnippet & { index: number }) => {
-  const publishedDate = format(new Date(createdAt), "dd mmm yyyy, hh:mm aa.");
+  const publishedDate = formatAppDate(createdAt);
 
-  const { accessToken } = useAuthStore();
-  const queryClient = useQueryClient();
-
-  const { isPending, mutate } = useMutation({
-    mutationFn: () => deleteBlog(accessToken!, blogId),
-    onError: (error) => {
-      console.error({ error });
-
-      if (isAxiosError(error)) {
-        const response =
-          error.response?.data?.response ||
-          error.response?.data?.response?.message;
-
-        const message =
-          typeof response === "string"
-            ? response
-            : JSON.stringify(response) || error.name;
-        toast.error(message);
-      } else {
-        toast.error(error.message);
-      }
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["blogs"] });
-      toast.success("Blog deleted successfully.");
-    },
-  });
+  const { isPending, mutate } = useDeleteBlog(draft);
 
   return (
     <AnimationWrapper
@@ -60,7 +30,6 @@ export const BlogPreviewCard = ({
           </h1>
         ) : (
           <img
-            //   src="/404.jpg"
             src={bannerUrl}
             alt="Blog Banner Image"
             className="max-md:hidden w-28 h-28 flex-none bg-gray-100 object-cover"
@@ -93,7 +62,7 @@ export const BlogPreviewCard = ({
               Edit
             </Link>
             <button
-              onClick={() => mutate()}
+              onClick={() => mutate(blogId)}
               className="underline hover:opacity-90 hover:no-underline py-2 cursor-pointer text-red-500 disabled:opacity-35"
               disabled={isPending}
             >

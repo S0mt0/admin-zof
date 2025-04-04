@@ -10,6 +10,7 @@ type Props = {
   id: string;
   value?: string;
   placeholder?: string;
+  iconClassName?: string;
   className?: string;
   icon?: LucideIcon;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
@@ -23,6 +24,7 @@ export const InputBox = ({
   className,
   icon: Icon,
   onChange,
+  iconClassName,
 }: Props) => {
   const [showPassword, setShowPassword] = useState(false);
 
@@ -35,9 +37,9 @@ export const InputBox = ({
           onClick={() => setShowPassword((curr) => !curr)}
         >
           {showPassword ? (
-            <Eye className="w-4 h-4 text-gray-600/80" />
+            <Eye className={cn("w-4 h-4 text-gray-600/80", iconClassName)} />
           ) : (
-            <EyeOff className="w-4 h-4 text-gray-600/80" />
+            <EyeOff className={cn("w-4 h-4 text-gray-600/80", iconClassName)} />
           )}
         </button>
       );
@@ -49,7 +51,12 @@ export const InputBox = ({
   return (
     <div className="relative mb-4 w-full h-fit">
       {Icon && (
-        <Icon className="absolute left-1.5 top-1/2 -translate-y-1/2 pointer-events-none w-4.5 h-4.5 text-gray-600/80" />
+        <Icon
+          className={cn(
+            "absolute left-1.5 top-1/2 -translate-y-1/2 pointer-events-none w-4.5 h-4.5 text-gray-600/80",
+            iconClassName
+          )}
+        />
       )}
 
       <Input

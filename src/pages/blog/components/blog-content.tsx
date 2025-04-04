@@ -70,13 +70,15 @@ export const BlogContent = ({ type, data }: Block) => {
           data.style === "ordered" ? "list-decimal" : "list-disc"
         )}
       >
-        {data.items?.map((listItem, i) => (
-          <li
-            key={i}
-            dangerouslySetInnerHTML={{ __html: listItem.content }}
-            className="my-4"
-          />
-        ))}
+        {data.items?.map((listItem, i) => {
+          return (
+            <li
+              key={i}
+              dangerouslySetInnerHTML={{ __html: listItem.content }}
+              className="my-4"
+            />
+          );
+        })}
       </ol>
     );
 };

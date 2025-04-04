@@ -37,7 +37,7 @@ export const useBlogEditor = () => {
         })
         .catch((e) => {
           toast.error("Error uploading image");
-          console.log({ e });
+          console.error({ e });
         })
         .finally(() => {
           toast.dismiss("upload");
@@ -75,7 +75,7 @@ export const useBlogEditor = () => {
         holder: editorContainerRef.current,
         data: blogData.content,
         tools: editorTools,
-        placeholder: "Let's write something cool...",
+        placeholder: "Write something cool...",
       });
     }
 
@@ -91,12 +91,11 @@ export const useBlogEditor = () => {
     if (!blogData.bannerUrl.length)
       return toast.error("Upload a blog banner to publish it");
 
-    if (!blogData.title.length)
+    if (!blogData.title.trim().length)
       return toast.error("Write a blog title to publish it");
 
     const editor = editorRef.current;
 
-    setEditorState("publish-form");
     if (editor) {
       editor
         .save()

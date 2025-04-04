@@ -17,9 +17,14 @@ export const useRefreshToken = () => {
       return accessToken;
     } catch (e) {
       if (isAxiosError(e)) {
-        const message = e.response?.data.response || "Network error";
+        const response =
+          e.response?.data?.response?.message || e.response?.data?.response;
 
-        toast.error(message, { id: "error" });
+        const message =
+          typeof response === "string"
+            ? response
+            : JSON.stringify(response) || e.message;
+        toast.error(message, { id: "refresh-error" });
       } else {
         toast.error("Network error", {
           id: "error",

@@ -8,13 +8,13 @@ import { isAxiosError } from "axios";
 import { login, signup } from "../api/requests";
 import { useAuthStore, useProfileStore } from "./use-store";
 
-const initPayload = { email: "", password: "" };
+const initPayload = { email: "", password: "", confirm_password: "" };
 
 export const useAuthForm = (type: "login" | "signup") => {
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
-  const [dto, setDto] = useState<AuthDto>(initPayload);
+  const [dto, setDto] = useState<SignUpDto>(initPayload);
 
   const { setAuth } = useAuthStore();
   const { setProfile } = useProfileStore();
@@ -25,6 +25,9 @@ export const useAuthForm = (type: "login" | "signup") => {
     if (!isEmail(dto.email)) return toast.error("Invalid email");
     if (type === "signup" && !isStrongPassword(dto.password, { minLength: 6 }))
       return toast.error("Password is too weak");
+
+    if (type === "signup" && dto.password !== dto.confirm_password)
+      return toast.error("Passwords do not match");
 
     setIsLoading(true);
 
@@ -38,17 +41,17 @@ export const useAuthForm = (type: "login" | "signup") => {
       if (type === "login") {
         const res = await login(dto);
 
-        const access_token = res.headers["authorization"] as string;
+        const accessToken = res.headers["authorization"] as string;
         const user = res.data.data as User;
 
-        setAuth(access_token);
+        setAuth(accessToken);
         setProfile(user);
 
         localStorage.setItem("isLoggedIn", "true");
         setDto(initPayload);
 
         toast.success(res.data.response as string);
-        navigate("/dashboard/blogs");
+        navigate("/dashboard/blogs?draft=false");
       }
     } catch (e: any) {
       if (isAxiosError(e)) {

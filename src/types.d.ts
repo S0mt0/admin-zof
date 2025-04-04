@@ -5,10 +5,12 @@ type ApiResponse<T = null> = {
   data?: T;
 };
 
-type AuthDto = {
+type LoginDto = {
   email: string;
   password: string;
 };
+
+type SignUpDto = LoginDto & { confirm_password };
 
 type NewPasswordDTO = {
   new_password: string;
@@ -47,11 +49,18 @@ interface ProfileStore {
 /* eslint-disable @typescript-eslint/no-explicit-any */
 type BlockType = "paragraph" | "header" | "list" | "image" | "quote";
 
+interface ListItem {
+  content: string;
+  items: ListItem[];
+
+  [key: string]: any;
+}
+
 interface BlockData {
   text?: string;
   level?: number;
   style?: "unordered" | "ordered";
-  items?: { content: string; [key: string]: any }[];
+  items?: ListItem[];
   file?: {
     url: string;
     size?: number;
@@ -115,20 +124,25 @@ interface ITeam {
 
 type EditorState = "editor" | "publish-form";
 
-interface EditorContextType {
+interface IEditorContext {
   blogData: BlogStructure;
   setBlogData: (data: BlogStructure) => void;
   editorState: EditorState;
   setEditorState: (state: EditorState) => void;
   draftState: boolean;
   setDraftState: (draft: boolean) => void;
+  type: "new" | "edit";
 }
 
 interface BlogStructure {
+  blogId?: string;
   title: string;
   bannerUrl: string;
   desc: string;
   draft: boolean;
   featured: boolean;
   content: { blocks: any[] } & { [key: string]: any };
+}
+interface EditorTools {
+  [toolName: string]: EditorJS.ToolConstructable | EditorJS.ToolSettings;
 }
