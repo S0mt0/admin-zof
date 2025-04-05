@@ -18,7 +18,8 @@ export const FormError = ({
       } else {
         if (isAxiosError(error)) {
           const response =
-            error.response?.data?.response || error.response?.data?.response;
+            error.response?.data?.response?.message ||
+            error.response?.data?.response;
 
           const message =
             typeof response === "string"

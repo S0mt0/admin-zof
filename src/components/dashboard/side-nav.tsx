@@ -3,9 +3,12 @@ import { LogOut } from "lucide-react";
 
 import { navLinks } from "./nav-links";
 import { cn } from "@/lib/utils";
+import { useLogout } from "@/lib/hooks";
 
 export const SideNav = () => {
   const pathname = useLocation().pathname;
+
+  const signOut = useLogout();
 
   return (
     <nav className="sticky w-full top-4 overflow-y-auto">
@@ -64,7 +67,10 @@ export const SideNav = () => {
         })}
 
         <li className="p-4 hover:bg-gray-50 transition-colors">
-          <button className="flex items-center justify-start gap-2 cursor-pointer w-full">
+          <button
+            className="flex items-center justify-start gap-2 cursor-pointer w-full"
+            onClick={signOut}
+          >
             <LogOut className="h-4 w-4 text-gray-500" />
             Logout
           </button>
