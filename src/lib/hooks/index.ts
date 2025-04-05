@@ -7,3 +7,5 @@ export * from "./use-blog-editor";
 export * from "./use-publish-blog";
 export * from "./use-delete-blog";
 export * from "./use-store";
+export * from "./use-delete-event";
+export * from "./use-get-events";

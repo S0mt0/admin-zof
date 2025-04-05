@@ -27,7 +27,8 @@ export const authEndpoints = {
 export const otherEndPoints = {
   blogs: "/blogs",
   /** `PUT` and `DELETE` */
-  upload: "/blogs/upload-img",
+  blogs_files: "/blogs/upload-img",
+  events_files: "/events/upload-img",
   events: "/events",
   team: "/team",
   /** `PATCH`, `GET` and `DELETE` */

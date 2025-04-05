@@ -98,20 +98,35 @@ interface BlogsData {
   };
 }
 
+interface EventsData {
+  events: TEventSnippet[];
+  pagination: {
+    total: number;
+    page: number;
+    limit: number;
+    totalPages: number;
+  };
+}
+
 // NGO Events
-interface TEvent {
+interface TEvent extends EventStructure {
   eventId: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+interface EventStructure {
+  eventId?: string;
   title: string;
   desc: string;
   bannerUrl: string;
   featured: boolean;
+  draft: boolean;
   scheduledFor: string;
   more_details: string;
-
-  [key: string]: any;
 }
 
-type TEventSnippet = Omit<TEvent, "details">;
+type TEventSnippet = Omit<TEvent, "more_details">;
 
 interface ITeam {
   name: string;
@@ -143,6 +158,7 @@ interface BlogStructure {
   featured: boolean;
   content: { blocks: any[] } & { [key: string]: any };
 }
+
 interface EditorTools {
   [toolName: string]: EditorJS.ToolConstructable | EditorJS.ToolSettings;
 }

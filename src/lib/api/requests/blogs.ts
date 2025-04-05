@@ -61,7 +61,7 @@ export const uploadImage = async (file: File) => {
 
   return (
     await axiosPrivate.put<ApiResponse<{ url: string }>>(
-      otherEndPoints.upload,
+      otherEndPoints.blogs_files,
       formData,
       {
         headers: {

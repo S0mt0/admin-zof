@@ -11,6 +11,8 @@ import { Editor } from "./pages/editor";
 import { ForgotPasswordPage } from "./pages/forgot-password";
 import { VerifyOTPPage } from "./pages/verify-otp";
 import { ResetPasswordPage } from "./pages/reset-password";
+import { EventsPage } from "./pages/events";
+import { SingleEventPage } from "./pages/event";
 
 function App() {
   return (
@@ -24,6 +26,7 @@ function App() {
       <Route element={<PersistLogin />}>
         <Route element={<RequireAuth />}>
           <Route path="/dashboard" element={<DashboardLayout />}>
+            {/* Blogs */}
             <Route path="blogs" element={<BlogsPage />} />
             <Route path="blogs/editor" element={<Editor type="new" />} />
             <Route path="blogs/:blogId" element={<SingleBlogPage />} />
@@ -32,8 +35,15 @@ function App() {
               element={<Editor type="edit" />}
             />
 
-            <Route path="events" element={<div>events page</div>} />
-            <Route path="events/:id" element={<div>single blog page</div>} />
+            {/* Events */}
+            <Route path="events" element={<EventsPage />} />
+            <Route path="events/editor" element={<Editor type="new" />} />
+            <Route path="events/:eventId" element={<SingleEventPage />} />
+            <Route
+              path="events/editor/:eventId"
+              element={<Editor type="edit" />}
+            />
+
             <Route path="team" element={<div>team page</div>} />
             <Route path="team/:id" element={<div>single blog page</div>} />
             <Route path="profile" element={<div>profile page</div>} />
