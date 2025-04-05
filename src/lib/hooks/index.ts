@@ -9,3 +9,5 @@ export * from "./use-delete-blog";
 export * from "./use-store";
 export * from "./use-delete-event";
 export * from "./use-get-events";
+export * from "./use-publish-event";
+export * from "./use-event-editor";

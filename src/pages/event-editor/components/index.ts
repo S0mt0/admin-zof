@@ -1,4 +1,4 @@
-export const initBlogStructure: BlogStructure = {
+export const initEventStructure: EventStructure = {
   title: "",
   bannerUrl: "",
   desc: "",

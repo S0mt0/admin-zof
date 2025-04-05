@@ -80,11 +80,11 @@ interface Block {
 }
 
 // NGO blog
-type TBlog = BlogStructure & {
+interface TBlog extends BlogStructure {
   blogId: string;
   createdAt: string;
   updatedAt: string;
-};
+}
 
 type TBlogSnippet = Omit<TBlog, "content">;
 
@@ -122,11 +122,11 @@ interface EventStructure {
   bannerUrl: string;
   featured: boolean;
   draft: boolean;
-  scheduledFor: string;
-  more_details: string;
+  scheduledFor?: Date;
+  content: { blocks: any[] } & { [key: string]: any };
 }
 
-type TEventSnippet = Omit<TEvent, "more_details">;
+type TEventSnippet = Omit<TEvent, "content">;
 
 interface ITeam {
   name: string;
@@ -139,7 +139,7 @@ interface ITeam {
 
 type EditorState = "editor" | "publish-form";
 
-interface IEditorContext {
+interface IBlogEditorContext {
   blogData: BlogStructure;
   setBlogData: (data: BlogStructure) => void;
   editorState: EditorState;
@@ -147,6 +147,18 @@ interface IEditorContext {
   draftState: boolean;
   setDraftState: (draft: boolean) => void;
   type: "new" | "edit";
+}
+
+interface IEventEditorContext {
+  eventData: EventStructure;
+  setEventData: (data: EventStructure) => void;
+  editorState: EditorState;
+  setEditorState: (state: EditorState) => void;
+  draftState: boolean;
+  setDraftState: (draft: boolean) => void;
+  type: "new" | "edit";
+  date?: Date;
+  setDate?: React.Dispatch<React.SetStateAction<Date | undefined>>;
 }
 
 interface BlogStructure {

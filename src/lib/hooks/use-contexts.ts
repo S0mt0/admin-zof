@@ -1,11 +1,23 @@
 import { useContext } from "react";
 
-import { EditorContext } from "../contexts";
+import { BlogEditorContext, EventEditorContext } from "../contexts";
 
-export const useEditorContext = () => {
-  const context = useContext(EditorContext);
+export const useBlogEditorContext = () => {
+  const context = useContext(BlogEditorContext);
   if (!context) {
-    throw new Error("useEditorContext must be used within a EditorProvider");
+    throw new Error(
+      "useBlogEditorContext must be used within a EditorProvider"
+    );
+  }
+  return context;
+};
+
+export const useEventEditorContext = () => {
+  const context = useContext(EventEditorContext);
+  if (!context) {
+    throw new Error(
+      "useEventEditorContext must be used within a EditorProvider"
+    );
   }
   return context;
 };

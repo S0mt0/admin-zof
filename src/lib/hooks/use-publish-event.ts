@@ -3,14 +3,21 @@ import { useNavigate } from "react-router-dom";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 
-import { initBlogStructure } from "@/pages/editor/components";
-import { useBlogEditorContext } from "./use-contexts";
+import { useEventEditorContext } from "./use-contexts";
 import { useAuthStore } from "./use-store";
-import { createBlog, updateBlog } from "../api/requests";
+import { createEvent, updateEvent } from "../api/requests";
+import { initEventStructure } from "@/pages/event-editor/components";
 
-export const usePublishBlogForm = () => {
-  const { blogData, setBlogData, setEditorState, draftState, type } =
-    useBlogEditorContext();
+export const usePublishEventForm = () => {
+  const {
+    eventData,
+    setEventData,
+    setEditorState,
+    draftState,
+    type,
+    date,
+    setDate,
+  } = useEventEditorContext();
 
   const descCharLimit = 200;
 
@@ -22,7 +29,7 @@ export const usePublishBlogForm = () => {
     input.style.height = input.scrollHeight + "px";
 
     if (input.value.length <= descCharLimit) {
-      setBlogData({ ...blogData, desc: input.value });
+      setEventData({ ...eventData, desc: input.value });
     }
   };
 
@@ -33,11 +40,11 @@ export const usePublishBlogForm = () => {
   };
 
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setBlogData({ ...blogData, title: e.target.value });
+    setEventData({ ...eventData, title: e.target.value });
   };
 
   const handleFeaturedChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setBlogData({ ...blogData, featured: e.target.checked });
+    setEventData({ ...eventData, featured: e.target.checked });
   };
 
   const { accessToken } = useAuthStore();
@@ -45,7 +52,9 @@ export const usePublishBlogForm = () => {
   const navigate = useNavigate();
 
   const { isPending, mutate } = useMutation({
-    mutationFn: (dto: BlogStructure) => {
+    mutationFn: (dto: EventStructure) => {
+      dto = { ...dto, scheduledFor: date };
+
       if (draftState) {
         dto = { ...dto, draft: true };
       } else {
@@ -53,9 +62,10 @@ export const usePublishBlogForm = () => {
       }
 
       return type === "new"
-        ? createBlog(accessToken!, dto)
-        : updateBlog(accessToken!, dto.blogId!, dto);
+        ? createEvent(accessToken!, dto)
+        : updateEvent(accessToken!, dto.eventId!, dto);
     },
+
     onError: (error) => {
       console.error({ error });
 
@@ -74,21 +84,21 @@ export const usePublishBlogForm = () => {
       }
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["blogs"] });
-      setBlogData(initBlogStructure);
-      navigate(`/dashboard/blogs?draft=${draftState ? "true" : "false"}`);
+      queryClient.invalidateQueries({ queryKey: ["events"] });
+      setEventData(initEventStructure);
+      navigate(`/dashboard/events?draft=${draftState ? "true" : "false"}`);
     },
   });
 
-  const handlePublishBlog = () => {
-    if (!draftState && !blogData.desc.length)
-      return toast.error("Write a short description about your blog");
+  const handlePublishEvent = () => {
+    if (!draftState && !eventData.desc.length)
+      return toast.error("Write a short description about your event");
 
-    mutate(blogData);
+    mutate(eventData);
   };
 
   return {
-    blogData,
+    eventData,
     setEditorState,
     handleDescriptionChange,
     handleTitleChange,
@@ -96,7 +106,10 @@ export const usePublishBlogForm = () => {
     descCharLimit,
     handleDescKeyDown,
     isPending,
-    handlePublishBlog,
+    handlePublishEvent,
     draftState,
+    date,
+    setDate,
+    type,
   };
 };

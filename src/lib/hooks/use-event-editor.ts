@@ -3,13 +3,13 @@ import { useEffect, useRef } from "react";
 import EditorJS from "@editorjs/editorjs";
 
 import defaultBannerImg from "../../assets/default-banner.png";
-import { useBlogEditorContext } from "@/lib/hooks";
+import { useEventEditorContext } from "@/lib/hooks";
 import { uploadImage } from "@/lib/api/requests";
 import { editorTools } from "../utils";
 
-export const useBlogEditor = () => {
-  const { blogData, setBlogData, setEditorState, setDraftState } =
-    useBlogEditorContext();
+export const useEventEditor = () => {
+  const { eventData, setEventData, setEditorState, setDraftState } =
+    useEventEditorContext();
 
   const handleBannerUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const allowedFileTypes = ["image/jpg", "image/png", "image/jpeg"];
@@ -33,7 +33,7 @@ export const useBlogEditor = () => {
       uploadImage(img)
         .then((url) => {
           toast.success("Upload success🎉" as string, { id: "upload-success" });
-          setBlogData({ ...blogData, bannerUrl: url as string });
+          setEventData({ ...eventData, bannerUrl: url as string });
         })
         .catch((e) => {
           toast.error("Error uploading image");
@@ -56,7 +56,7 @@ export const useBlogEditor = () => {
     input.style.height = "auto";
     input.style.height = input.scrollHeight + "px";
 
-    setBlogData({ ...blogData, title: input.value });
+    setEventData({ ...eventData, title: input.value });
   };
 
   const handleBannerImgError = (
@@ -73,7 +73,7 @@ export const useBlogEditor = () => {
     if (editorContainerRef.current && !editorRef.current) {
       editorRef.current = new EditorJS({
         holder: editorContainerRef.current,
-        data: blogData.content,
+        data: eventData.content,
         tools: editorTools,
         placeholder: "Write something cool...",
       });
@@ -85,14 +85,14 @@ export const useBlogEditor = () => {
       }
       editorRef.current = null;
     };
-  }, [blogData.content]);
+  }, [eventData.content]);
 
   const handlePublishEvent = async (draft: boolean) => {
-    if (!blogData.bannerUrl.length)
-      return toast.error("Upload a blog banner to publish it");
+    if (!eventData.bannerUrl.length)
+      return toast.error("Upload event banner to publish it");
 
-    if (!blogData.title.trim().length)
-      return toast.error("Write a blog title to publish it");
+    if (!eventData.title.trim().length)
+      return toast.error("Write event title to publish it");
 
     const editor = editorRef.current;
 
@@ -101,12 +101,12 @@ export const useBlogEditor = () => {
         .save()
         .then((data) => {
           if (data.blocks.length) {
-            setBlogData({ ...blogData, content: data });
+            setEventData({ ...eventData, content: data });
             setEditorState("publish-form");
             setDraftState(draft);
           } else {
             return toast.error(
-              "Please write something in your blog to publish it"
+              "Please write something in your event to publish it"
             );
           }
         })
@@ -123,7 +123,7 @@ export const useBlogEditor = () => {
     handleTitleKeyDown,
     handleTitleChange,
     handleBannerImgError,
-    blogData,
+    eventData,
     editorContainerRef,
     handlePublishEvent,
   };

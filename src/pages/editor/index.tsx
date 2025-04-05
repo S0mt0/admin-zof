@@ -5,7 +5,7 @@ import { useParams } from "react-router-dom";
 
 import { BlogEditor } from "./components/blog-editor";
 import { PublishForm } from "./components/publish-form";
-import { EditorContext } from "@/lib/contexts";
+import { BlogEditorContext } from "@/lib/contexts";
 import { initBlogStructure } from "./components";
 import { getBlog } from "@/lib/api/requests";
 
@@ -28,7 +28,7 @@ export const Editor = ({ type }: { type: "new" | "edit" }) => {
   }
 
   return (
-    <EditorContext.Provider
+    <BlogEditorContext.Provider
       value={{
         blogData,
         setBlogData,
@@ -40,6 +40,6 @@ export const Editor = ({ type }: { type: "new" | "edit" }) => {
       }}
     >
       {editorState === "editor" ? <BlogEditor /> : <PublishForm />}
-    </EditorContext.Provider>
+    </BlogEditorContext.Provider>
   );
 };

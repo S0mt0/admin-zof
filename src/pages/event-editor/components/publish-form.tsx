@@ -1,22 +1,27 @@
 import { X } from "lucide-react";
+import { format } from "date-fns";
 
 import { AnimationWrapper } from "@/components/ui/animation-wrapper";
-import { usePublishBlogForm } from "@/lib/hooks";
+import { usePublishEventForm } from "@/lib/hooks";
 import { LoadingDots } from "@/components/ui/loading-dots";
+import { DatePicker } from "@/components/ui/date-picker";
 
 export const PublishForm = () => {
   const {
     setEditorState,
-    blogData,
+    eventData,
     handleTitleChange,
     handleDescriptionChange,
     handleFeaturedChange,
     descCharLimit,
     handleDescKeyDown,
-    handlePublishBlog,
+    handlePublishEvent,
     isPending,
     draftState,
-  } = usePublishBlogForm();
+    date,
+    setDate,
+    type,
+  } = usePublishEventForm();
   return (
     <AnimationWrapper keyValue="publish-form">
       <section className="relative w-full min-h-screen items-start grid grid-cols-1 lg:grid-cols-2 py-16 lg:gap-4">
@@ -31,17 +36,27 @@ export const PublishForm = () => {
           <p>Preview</p>
           <div className="w-full aspect-video rounded-lg overflow-hidden bg-gray-100 mt-4">
             <img
-              src={blogData.bannerUrl}
-              alt="Blog banner image"
+              src={eventData.bannerUrl}
+              alt="Event banner image"
               className="w-full h-full object-cover object-center"
             />
           </div>
           <h1 className="font-medium text-3xl text-gray-700 my-6 line-clamp-2 leading-tight">
-            {blogData.title}
+            {eventData.title}
           </h1>
 
+          {eventData.scheduledFor && (
+            <p className="text-sm text-gray-400 my-6 line-clamp-2 leading-tightbreak-words">
+              Event date:{" "}
+              <span className="underline font-semibold text-green-600">
+                {" "}
+                {format(new Date(eventData.scheduledFor), "PPP")}
+              </span>
+            </p>
+          )}
+
           <p className="text-lg text-gray-400 my-6 line-clamp-2 leading-7 font-light break-words">
-            {blogData.desc}
+            {eventData.desc}
           </p>
 
           <hr className="lg:hidden mt-10" />
@@ -49,35 +64,40 @@ export const PublishForm = () => {
 
         {/* form */}
         <div className="lg:pl-4 mt-20">
-          <p className="text-gray-400 mb-2">Blog Title:</p>
+          <p className="text-gray-400 mb-2">Event Title:</p>
           <input
             type="text"
-            placeholder="Blog title"
+            placeholder="Event title"
             className="bg-neutral-100 py-2 px-4 w-full border rounded-sm"
-            defaultValue={blogData.title}
+            defaultValue={eventData.title}
             onChange={handleTitleChange}
           />
           <p className="text-gray-400 mb-2 mt-9">
-            A short description about your blog:
+            A short description about your event:
           </p>
           <textarea
-            placeholder="Blog description"
+            placeholder="Event description"
             className="bg-neutral-100 py-2 px-4 w-full border rounded-sm min-h-14 resize-none max-h-40"
-            value={blogData.desc}
+            value={eventData.desc}
             onChange={handleDescriptionChange}
             maxLength={descCharLimit}
             onKeyDown={handleDescKeyDown}
           />
           <p className="text-xs">
-            {descCharLimit - blogData.desc.length} characters left
+            {descCharLimit - eventData.desc.length} characters left
           </p>
+
+          <p className="text-gray-400 mb-2 mt-9">
+            {type === "edit" ? "Change date" : "Choose a date for the event"}:
+          </p>
+          <DatePicker date={date} setDate={setDate} />
 
           <p className="flex items-center mt-4 gap-2">
             <input
               type="checkbox"
               id="featured"
               onChange={handleFeaturedChange}
-              checked={blogData.featured}
+              checked={eventData.featured}
             />
             <label htmlFor="featured" className="cursor-pointer">
               Featured
@@ -86,7 +106,7 @@ export const PublishForm = () => {
 
           <button
             className="h-10 flex items-center justify-center mt-10 rounded-full text-white bg-green-800 hover:bg-green-700 transition cursor-pointer w-32"
-            onClick={handlePublishBlog}
+            onClick={handlePublishEvent}
             disabled={isPending}
           >
             {isPending ? (

@@ -13,6 +13,7 @@ import { VerifyOTPPage } from "./pages/verify-otp";
 import { ResetPasswordPage } from "./pages/reset-password";
 import { EventsPage } from "./pages/events";
 import { SingleEventPage } from "./pages/event";
+import { EventEditorPage } from "./pages/event-editor";
 
 function App() {
   return (
@@ -37,11 +38,14 @@ function App() {
 
             {/* Events */}
             <Route path="events" element={<EventsPage />} />
-            <Route path="events/editor" element={<Editor type="new" />} />
+            <Route
+              path="events/editor"
+              element={<EventEditorPage type="new" />}
+            />
             <Route path="events/:eventId" element={<SingleEventPage />} />
             <Route
               path="events/editor/:eventId"
-              element={<Editor type="edit" />}
+              element={<EventEditorPage type="edit" />}
             />
 
             <Route path="team" element={<div>team page</div>} />
